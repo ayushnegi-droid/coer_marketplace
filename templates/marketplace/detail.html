@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% block title %}{{ listing.title }} — COER Marketplace{% endblock %}
+
+{% block extra_css %}
+.detail-wrap { max-width: 900px; margin: 0 auto; padding: 36px 0 60px; }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: start; }
+.carousel { border-radius: var(--r-lg); overflow: hidden; background: #f1f5f9; position: relative; }
+.carousel-track { display: flex; transition: transform 0.35s ease; }
+.carousel-slide { min-width: 100%; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; font-size: 5rem; background: linear-gradient(135deg,#f1f5f9,#e2e8f0); overflow: hidden; }
+.carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
+.car-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; color: var(--text); box-shadow: var(--shadow-sm); transition: all 0.2s; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; }
+.car-btn:hover { background: #fff; box-shadow: var(--shadow-md); }
+.car-btn.prev { left: 12px; }
+.car-btn.next { right: 12px; }
+.car-dots { display: flex; justify-content: center; gap: 6px; padding: 10px 0 4px; }
+.car-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); transition: all 0.2s; cursor: pointer; border: none; }
+.car-dot.active { background: var(--primary); width: 20px; border-radius: 4px; }
+.detail-info { display: flex; flex-direction: column; gap: 16px; }
+.detail-category { font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Sora', sans-serif; }
+.detail-title { font-size: 1.7rem; font-weight: 800; line-height: 1.2; }
+.detail-price { font-size: 2rem; font-weight: 900; color: var(--primary); font-family: 'Sora', sans-serif; }
+.detail-desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; }
+.detail-divider { border: none; border-top: 1px solid var(--border); }
+.seller-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; display: flex; align-items: center; gap: 14px; }
+.seller-av { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--primary-light)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.1rem; font-family: 'Sora', sans-serif; overflow: hidden; flex-shrink: 0; }
+.seller-av img { width: 100%; height: 100%; object-fit: cover; }
+.seller-name { font-weight: 700; font-size: 0.95rem; }
+.seller-dept { font-size: 0.82rem; color: var(--text-muted); }
+@media(max-width:768px){ .detail-grid { grid-template-columns: 1fr; } }
+{% endblock %}
+
+{% block content %}
+<div class="detail-wrap container">
+    <a href="{% url 'home' %}" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to listings
+    </a>
+
+    <div class="detail-grid">
+        <!-- Image Carousel -->
+        <div>
+            <div class="carousel">
+                <div class="carousel-track" id="carTrack">
+                    <div class="carousel-slide">
+                        {% if listing.image1 %}<img src="{{ listing.image1.url }}" alt="">{% else %}<span>📦</span>{% endif %}
+                    </div>
+                    <div class="carousel-slide">
+                        {% if listing.image2 %}<img src="{{ listing.image2.url }}" alt="">{% else %}<span>📦</span>{% endif %}
+                    </div>
+                    <div class="carousel-slide">
+                        {% if listing.image3 %}<img src="{{ listing.image3.url }}" alt="">{% else %}<span>📦</span>{% endif %}
+                    </div>
+                </div>
+                <button class="car-btn prev" onclick="carNav(-1)"><i class="fas fa-chevron-left"></i></button>
+                <button class="car-btn next" onclick="carNav(1)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="car-dots">
+                <button class="car-dot active" onclick="goSlide(0)"></button>
+                <button class="car-dot" onclick="goSlide(1)"></button>
+                <button class="car-dot" onclick="goSlide(2)"></button>
+            </div>
+        </div>
+
+        <!-- Item Info -->
+        <div class="detail-info">
+            <div>
+                <div class="detail-category">{{ listing.category }}</div>
+                {% if listing.status == 'sold' %}
+                    <span class="status-badge status-sold" style="display:inline-flex;margin-bottom:6px;">Sold</span>
+                {% endif %}
+                <h1 class="detail-title">{{ listing.title }}</h1>
+            </div>
+
+            <div class="detail-price">₹{{ listing.price }}</div>
+            <hr class="detail-divider">
+
+            <div>
+                <div style="font-weight:700;font-size:0.88rem;margin-bottom:6px;color:var(--text-muted);">DESCRIPTION</div>
+                <div class="detail-desc">{{ listing.description }}</div>
+            </div>
+            <hr class="detail-divider">
+
+            <div>
+                <div style="font-weight:700;font-size:0.88rem;margin-bottom:10px;color:var(--text-muted);">SELLER</div>
+                <div class="seller-card">
+                    <div class="seller-av">
+                        {% if listing.seller.profile.picture %}
+                            <img src="{{ listing.seller.profile.picture.url }}" alt="">
+                        {% else %}
+                            {{ listing.seller.profile.full_name|first|upper }}
+                        {% endif %}
+                    </div>
+                    <div>
+                        <div class="seller-name">{{ listing.seller.profile.full_name }}</div>
+                        <div class="seller-dept">
+                            {{ listing.seller.profile.department }}
+                            {% if listing.seller.profile.year %} · {{ listing.seller.profile.year }}{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if listing.status != 'sold' %}
+                {% if listing.seller != request.user %}
+                    <a href="{% url 'chat' listing.pk %}" class="btn btn-primary btn-full">
+                        <i class="fas fa-comment-dots"></i> Contact Seller
+                    </a>
+                {% endif %}
+                <button class="btn btn-ghost btn-full" id="wishBtn" onclick="toggleWishlist({{ listing.pk }}, this)">
+                    <i class="fa{% if in_wishlist %}s{% else %}r{% endif %} fa-heart"></i>
+                    <span>{% if in_wishlist %}Saved{% else %}Save to Wishlist{% endif %}</span>
+                </button>
+            {% else %}
+                <div style="text-align:center;color:var(--text-muted);padding:14px;background:var(--bg);border-radius:var(--r);font-size:0.9rem;">
+                    This item has been sold.
+                </div>
+            {% endif %}
+
+            {% if listing.seller == request.user %}
+                <hr class="detail-divider">
+                <div style="display:flex;gap:10px;">
+                    {% if listing.status == 'available' %}
+                        <a href="{% url 'mark_sold' listing.pk %}" class="btn btn-ghost btn-sm">
+                            <i class="fas fa-check"></i> Mark as Sold
+                        </a>
+                    {% else %}
+                        <a href="{% url 'mark_available' listing.pk %}" class="btn btn-ghost btn-sm">
+                            <i class="fas fa-undo"></i> Relist
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'delete_listing' listing.pk %}"
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('Delete this listing?')">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let carIdx = 0;
+function carNav(dir) { carIdx = (carIdx + dir + 3) % 3; goSlide(carIdx); }
+function goSlide(idx) {
+    carIdx = idx;
+    document.getElementById('carTrack').style.transform = `translateX(-${idx * 100}%)`;
+    document.querySelectorAll('.car-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+function toggleWishlist(id, btn) {
+    fetch(`/wishlist/${id}/`, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+    })
+    .then(r => r.json())
+    .then(data => {
+        const icon = btn.querySelector('i');
+        const text = btn.querySelector('span');
+        if (data.status === 'added') {
+            icon.className = 'fas fa-heart';
+            text.textContent = 'Saved';
+            showToast('Saved to wishlist ❤️', 'success');
+        } else {
+            icon.className = 'far fa-heart';
+            text.textContent = 'Save to Wishlist';
+            showToast('Removed from wishlist', 'info');
+        }
+    });
+}
+</script>
+{% endblock %}

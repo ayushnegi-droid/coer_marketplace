@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard — COER Marketplace{% endblock %}
+
+{% block extra_css %}
+.dashboard-wrap { padding: 36px 0 60px; }
+.dash-header { display: flex; align-items: center; gap: 18px; margin-bottom: 32px; flex-wrap: wrap; }
+.dash-avatar { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #7c3aed); color: #fff; font-size: 1.6rem; font-weight: 800; display: flex; align-items: center; justify-content: center; font-family: 'Sora', sans-serif; overflow: hidden; flex-shrink: 0; }
+.dash-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.dash-name { font-size: 1.4rem; font-weight: 800; }
+.dash-dept { color: var(--text-muted); font-size: 0.9rem; }
+.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 28px; }
+.stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; text-align: center; }
+.stat-num { font-size: 1.8rem; font-weight: 900; color: var(--primary); font-family: 'Sora', sans-serif; }
+.stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; }
+.dash-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: var(--bg-card); padding: 4px; border-radius: 40px; border: 1px solid var(--border); width: fit-content; }
+.dash-tab { padding: 8px 20px; border-radius: 40px; border: none; background: none; font-family: inherit; font-size: 0.88rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s; }
+.dash-tab.active { background: var(--primary); color: #fff; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.listing-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; display: flex; gap: 16px; align-items: center; margin-bottom: 12px; transition: all 0.2s; }
+.listing-card:hover { box-shadow: var(--shadow-sm); }
+.listing-img { width: 70px; height: 70px; border-radius: var(--r-sm); background: linear-gradient(135deg,#f1f5f9,#e2e8f0); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; overflow: hidden; flex-shrink: 0; }
+.listing-img img { width: 100%; height: 100%; object-fit: cover; }
+.listing-info { flex: 1; min-width: 0; }
+.listing-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.listing-price { color: var(--primary); font-weight: 700; font-size: 0.9rem; }
+.listing-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; flex-shrink: 0; }
+.wish-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 16px; }
+.wish-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; text-decoration: none; color: inherit; display: block; transition: all 0.2s; }
+.wish-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.wish-img { height: 140px; background: linear-gradient(135deg,#f1f5f9,#e2e8f0); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; overflow: hidden; }
+.wish-img img { width: 100%; height: 100%; object-fit: cover; }
+.wish-body { padding: 12px; }
+.wish-title { font-weight: 700; font-size: 0.88rem; margin-bottom: 4px; }
+.wish-price { font-weight: 800; color: var(--primary); font-family: 'Sora', sans-serif; font-size: 0.95rem; }
+@media(max-width:640px){ .stats-row { grid-template-columns: 1fr 1fr; } }
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrap">
+    <div class="container">
+
+        <!-- Header -->
+        <div class="dash-header">
+            <div class="dash-avatar">
+                {% if request.user.profile.picture %}
+                    <img src="{{ request.user.profile.picture.url }}" alt="">
+                {% else %}
+                    {{ request.user.profile.full_name|first|upper }}
+                {% endif %}
+            </div>
+            <div>
+                <div class="dash-name">{{ request.user.profile.full_name }}</div>
+                <div class="dash-dept">
+                    {{ request.user.profile.department }}
+                    {% if request.user.profile.year %} · {{ request.user.profile.year }}{% endif %}
+                </div>
+            </div>
+            <a href="{% url 'edit_profile' %}" class="btn btn-ghost btn-sm" style="margin-left:auto;">
+                <i class="fas fa-edit"></i> Edit Profile
+            </a>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-num">{{ my_listings|length }}</div>
+                <div class="stat-label">My Listings</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">{{ my_listings|dictsortreversed:"status"|length }}</div>
+                <div class="stat-label">Sold Items</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">{{ wishlist|length }}</div>
+                <div class="stat-label">Saved Items</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="dash-tabs">
+            <button class="dash-tab active" onclick="switchTab('my-listings', this)">My Listings</button>
+            <button class="dash-tab" onclick="switchTab('contacted', this)">Contacted</button>
+            <button class="dash-tab" onclick="switchTab('wishlist', this)">Wishlist</button>
+        </div>
+
+        <!-- MY LISTINGS TAB -->
+        <div class="tab-content active" id="tab-my-listings">
+            {% if my_listings %}
+                {% for listing in my_listings %}
+                <div class="listing-card">
+                    <div class="listing-img">
+                        {% if listing.image1 %}<img src="{{ listing.image1.url }}" alt="">{% else %}📦{% endif %}
+                    </div>
+                    <div class="listing-info">
+                        <div class="listing-title">{{ listing.title }}</div>
+                        <div class="listing-price">₹{{ listing.price }}</div>
+                        <div style="margin-top:5px;">
+                            <span class="status-badge {% if listing.status == 'sold' %}status-sold{% else %}status-available{% endif %}">
+                                {{ listing.status|capfirst }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="listing-actions">
+                        {% if listing.status == 'available' %}
+                            <a href="{% url 'mark_sold' listing.pk %}" class="btn btn-sm btn-ghost">
+                                <i class="fas fa-check"></i> Mark Sold
+                            </a>
+                        {% else %}
+                            <a href="{% url 'mark_available' listing.pk %}" class="btn btn-sm btn-ghost">
+                                <i class="fas fa-undo"></i> Relist
+                            </a>
+                        {% endif %}
+                        <a href="{% url 'delete_listing' listing.pk %}"
+                            class="btn btn-sm btn-danger"
+                            onclick="return confirm('Delete this listing?')">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">📭</div>
+                    <h3>No listings yet</h3>
+                    <p>Start selling! Post your first item.</p>
+                    <a href="{% url 'sell' %}" class="btn btn-primary" style="margin-top:16px;">
+                        <i class="fas fa-plus"></i> Sell Item
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- CONTACTED TAB -->
+        <div class="tab-content" id="tab-contacted">
+            {% if contacted_listings %}
+                {% for listing in contacted_listings %}
+                <div class="listing-card" style="cursor:pointer;" onclick="location.href='{% url 'detail' listing.pk %}'">
+                    <div class="listing-img">
+                        {% if listing.image1 %}<img src="{{ listing.image1.url }}" alt="">{% else %}📦{% endif %}
+                    </div>
+                    <div class="listing-info">
+                        <div class="listing-title">{{ listing.title }}</div>
+                        <div class="listing-price">₹{{ listing.price }}</div>
+                        <div style="font-size:0.8rem;color:var(--text-muted);margin-top:3px;">
+                            Seller: {{ listing.seller.profile.full_name }}
+                        </div>
+                    </div>
+                    <a href="{% url 'chat' listing.pk %}" class="btn btn-sm btn-outline"
+                        onclick="event.stopPropagation()">
+                        <i class="fas fa-comment"></i> Chat
+                    </a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">💬</div>
+                    <h3>No conversations yet</h3>
+                    <p>Browse listings and contact sellers!</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- WISHLIST TAB -->
+        <div class="tab-content" id="tab-wishlist">
+            {% if wishlist %}
+                <div class="wish-grid">
+                {% for w in wishlist %}
+                    <a href="{% url 'detail' w.listing.pk %}" class="wish-card">
+                        <div class="wish-img">
+                            {% if w.listing.image1 %}
+                                <img src="{{ w.listing.image1.url }}" alt="">
+                            {% else %}📦{% endif %}
+                        </div>
+                        <div class="wish-body">
+                            <div class="wish-title">{{ w.listing.title }}</div>
+                            <div class="wish-price">₹{{ w.listing.price }}</div>
+                        </div>
+                    </a>
+                {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">❤️</div>
+                    <h3>No saved items</h3>
+                    <p>Tap the heart on any listing to save it here.</p>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function switchTab(tab, btn) {
+    document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+}
+</script>
+{% endblock %}

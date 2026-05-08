@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block title %}Sell Item — COER Marketplace{% endblock %}
+
+{% block extra_css %}
+.wrap { max-width: 680px; margin: 0 auto; padding: 36px 0 60px; }
+.page-header { margin-bottom: 28px; }
+.page-header h2 { font-size: 1.7rem; font-weight: 800; margin-bottom: 6px; }
+.page-header p { color: var(--text-muted); }
+.form-card { background: var(--bg-card); border-radius: var(--r-lg); padding: 32px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+.img-upload-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 6px; }
+.img-slot { aspect-ratio: 1; border: 2px dashed var(--border); border-radius: var(--r); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: all 0.2s; color: var(--text-light); font-size: 0.8rem; text-align: center; background: var(--bg); position: relative; overflow: hidden; }
+.img-slot:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+.img-slot i { font-size: 1.6rem; }
+.img-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.remove-img { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%; background: rgba(0,0,0,0.55); color: #fff; border: none; font-size: 0.65rem; cursor: pointer; display: none; align-items: center; justify-content: center; }
+.img-slot:hover .remove-img { display: flex; }
+.char-count { font-size: 0.78rem; color: var(--text-light); text-align: right; margin-top: 4px; }
+{% endblock %}
+
+{% block content %}
+<div class="wrap container">
+    <div class="page-header">
+        <h2>List an Item</h2>
+        <p>Fill in the details below to post your item on the marketplace.</p>
+    </div>
+    <div class="form-card">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- 3 Image Upload -->
+            <div class="form-group">
+                <label class="form-label">Item Photos <span>(Exactly 3 required)</span></label>
+                <div class="img-upload-grid">
+                    <div class="img-slot" onclick="document.getElementById('img0').click()" id="slot0">
+                        <i class="fas fa-camera"></i><span>Photo 1</span>
+                        <button type="button" class="remove-img" onclick="removeImg(event,0)"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="img-slot" onclick="document.getElementById('img1').click()" id="slot1">
+                        <i class="fas fa-camera"></i><span>Photo 2</span>
+                        <button type="button" class="remove-img" onclick="removeImg(event,1)"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="img-slot" onclick="document.getElementById('img2').click()" id="slot2">
+                        <i class="fas fa-camera"></i><span>Photo 3</span>
+                        <button type="button" class="remove-img" onclick="removeImg(event,2)"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <input type="file" id="img0" name="image1" accept="image/*" style="display:none;" onchange="previewSlot(this,0)" required>
+                <input type="file" id="img1" name="image2" accept="image/*" style="display:none;" onchange="previewSlot(this,1)" required>
+                <input type="file" id="img2" name="image3" accept="image/*" style="display:none;" onchange="previewSlot(this,2)" required>
+                {% if form.image1.errors %}
+                    <span class="form-error">{{ form.image1.errors|join:', ' }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Item Title</label>
+                <input type="text" name="title" class="form-input"
+                    placeholder="e.g. Engineering Physics Textbook"
+                    value="{{ form.title.value|default:'' }}" required>
+                {% if form.title.errors %}
+                    <span class="form-error">{{ form.title.errors|join:', ' }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label">Price (₹)</label>
+                    <input type="number" name="price" class="form-input"
+                        placeholder="0" min="0" value="{{ form.price.value|default:'' }}" required>
+                    {% if form.price.errors %}
+                        <span class="form-error">{{ form.price.errors|join:', ' }}</span>
+                    {% endif %}
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label">Category</label>
+                    <select name="category" class="form-select" required>
+                        <option value="">Select category</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat }}" {% if form.category.value == cat %}selected{% endif %}>{{ cat }}</option>
+                        {% endfor %}
+                    </select>
+                    {% if form.category.errors %}
+                        <span class="form-error">{{ form.category.errors|join:', ' }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top:18px;">
+                <label class="form-label">Description <span>(Min 10 characters)</span></label>
+                <textarea name="description" class="form-textarea" id="descArea"
+                    rows="4" placeholder="Describe the condition, usage, and any other details…"
+                    oninput="updateCount()">{{ form.description.value|default:'' }}</textarea>
+                <div class="char-count" id="charCount">0 / 10 min</div>
+                {% if form.description.errors %}
+                    <span class="form-error">{{ form.description.errors|join:', ' }}</span>
+                {% endif %}
+            </div>
+
+            <div style="display:flex;gap:12px;margin-top:8px;">
+                <a href="{% url 'home' %}" class="btn btn-ghost">
+                    <i class="fas fa-arrow-left"></i> Cancel
+                </a>
+                <button type="submit" class="btn btn-primary" style="flex:1;justify-content:center;">
+                    <i class="fas fa-tag"></i> Post Listing
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function previewSlot(input, slot) {
+    if (!input.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        const s = document.getElementById('slot' + slot);
+        s.innerHTML = `<img src="${e.target.result}" alt=""><button type="button" class="remove-img" onclick="removeImg(event,${slot})"><i class="fas fa-times"></i></button>`;
+    };
+    reader.readAsDataURL(input.files[0]);
+}
+function removeImg(e, slot) {
+    e.stopPropagation();
+    document.getElementById('img' + slot).value = '';
+    const labels = ['Photo 1','Photo 2','Photo 3'];
+    const s = document.getElementById('slot' + slot);
+    s.innerHTML = `<i class="fas fa-camera"></i><span>${labels[slot]}</span><button type="button" class="remove-img" onclick="removeImg(event,${slot})"><i class="fas fa-times"></i></button>`;
+}
+function updateCount() {
+    const val = document.getElementById('descArea').value.length;
+    const el  = document.getElementById('charCount');
+    el.textContent = `${val} / 10 min`;
+    el.style.color = val >= 10 ? 'var(--success)' : 'var(--text-light)';
+}
+updateCount();
+</script>
+{% endblock %}
