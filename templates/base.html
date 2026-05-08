@@ -108,7 +108,7 @@
 <nav class="navbar">
     <div class="container">
         <div class="nav-inner">
-            <a class="logo" href="{% url 'home' %}">🏫 COER<span>Market</span></a>
+            <a class="logo" href="{% url 'home' %}">🏫 COER_<span>Marketplace</span></a>
             <form class="search-wrap" method="GET" action="{% url 'home' %}">
                 <i class="fas fa-search"></i>
                 <input type="text" class="search-input" name="q" placeholder="Search items, books, electronics…" value="{{ request.GET.q|default:'' }}">
