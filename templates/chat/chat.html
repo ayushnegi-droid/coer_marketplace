@@ -11,7 +11,19 @@
 .chat-header-name { font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 6px; }
 .chat-header-item { font-size: 0.82rem; color: var(--text-muted); }
 .online-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); display: inline-block; }
-.chat-messages { background: var(--bg); border-left: 1px solid var(--border); border-right: 1px solid var(--border); padding: 20px; height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+.chat-messages{
+    background:var(--bg);
+    border-left:1px solid var(--border);
+    border-right:1px solid var(--border);
+    padding:20px;
+    height:65vh;
+    min-height:420px;
+    max-height:700px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
 .msg { display: flex; gap: 8px; max-width: 75%; }
 .msg.sent { align-self: flex-end; flex-direction: row-reverse; }
 .msg.received { align-self: flex-start; }

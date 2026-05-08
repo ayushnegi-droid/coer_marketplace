@@ -21,7 +21,26 @@
         }
         body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
         h1,h2,h3,h4 { font-family: 'Sora', sans-serif; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .container{
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+    padding:0 24px;
+}
+
+@media(max-width:768px){
+
+    .container{
+        padding:0 16px;
+    }
+}
+
+@media(max-width:480px){
+
+    .container{
+        padding:0 12px;
+    }
+}
 
         /* NAVBAR */
         .navbar { background: rgba(255,255,255,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 200; padding: 14px 0; }
