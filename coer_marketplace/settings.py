@@ -100,20 +100,18 @@ ALLOWED_EMAIL_DOMAIN = 'coeruniversity.ac.in'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
 import cloudinary
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('dfefxc3aj'),
-    'API_KEY': os.environ.get('725385862482216'),
-    'API_SECRET': os.environ.get('LTKSnt0gbWRoniKyduNn3XeIiJQ'),
+    'CLOUD_NAME': 'dfefxc3aj',
+    'API_KEY': '725385862482216',
+    'API_SECRET': 'LTKSnt0gbWRoniKyduNn3XeIiJQ',
 }
 
 cloudinary.config(
-    cloud_name = os.environ.get('dfefxc3aj'),
-    api_key = os.environ.get('725385862482216'),
-    api_secret = os.environ.get('LTKSnt0gbWRoniKyduNn3XeIiJQ'),
+    cloud_name='dfefxc3aj',
+    api_key='725385862482216',
+    api_secret='LTKSnt0gbWRoniKyduNn3XeIiJQ',
 )
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
