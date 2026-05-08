@@ -69,7 +69,7 @@ def profile_setup_view(request):
 
 @login_required
 def edit_profile_view(request):
-    profile = request.user.profile
+    profile, _ = Profile.objects.get_or_create(user=request.user)
     year_choices = ['1st Year', '2nd Year', '3rd Year', '4th Year', 'Post-Grad']
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
