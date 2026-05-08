@@ -92,12 +92,136 @@
         .skel-card { height: 300px; border-radius: var(--r); }
 
         /* RESPONSIVE */
-        @media(max-width:768px){
-            .nav-inner { flex-wrap: wrap; }
-            .search-wrap { order: 3; max-width: 100%; flex: 0 0 100%; }
-            .nav-right { margin-left: 0; }
-            .form-row { grid-template-columns: 1fr; }
-        }
+@media(max-width:768px){
+
+    .container {
+        padding: 0 14px;
+    }
+
+    .nav-inner {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .search-wrap {
+        order: 3;
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+
+    .nav-right {
+        margin-left: 0;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .logo {
+        font-size: 1.05rem;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+    }
+
+    .search-input {
+        font-size: 0.9rem;
+    }
+
+    /* DASHBOARD STATS */
+    .stats-grid,
+    .dashboard-stats {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    /* MESSAGE TABS */
+    .message-tabs,
+    .dashboard-tabs {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 8px;
+        scrollbar-width: none;
+    }
+
+    .message-tabs::-webkit-scrollbar,
+    .dashboard-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .message-tabs button,
+    .dashboard-tabs button {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    /* FILTER */
+    .filters,
+    .filter-bar,
+    .filter-wrap {
+        display: flex !important;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .filters > *,
+    .filter-bar > *,
+    .filter-wrap > * {
+        flex: 1 1 calc(50% - 10px);
+        min-width: 120px;
+    }
+
+    /* ITEM GRID */
+    .item-grid,
+    .listing-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    /* SELLER NAME */
+    .seller-name,
+    .item-seller,
+    .listing-seller {
+        font-size: 0.8rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* CHAT */
+    .chat-container {
+        height: calc(100vh - 80px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .chat-input-area,
+    .message-input-wrap {
+        position: sticky;
+        bottom: 0;
+        background: white;
+        padding: 10px;
+        border-top: 1px solid var(--border);
+    }
+
+    /* PRODUCT PAGE */
+    .product-title {
+        font-size: 1.8rem !important;
+    }
+
+    .price {
+        font-size: 1.5rem !important;
+    }
+}
 
         {% block extra_css %}{% endblock %}
     </style>
