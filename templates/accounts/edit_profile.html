@@ -2,7 +2,29 @@
 {% block title %}Edit Profile — COER Marketplace{% endblock %}
 
 {% block extra_css %}
-.wrap { max-width: 620px; margin: 0 auto; padding: 36px 0 60px; }
+.wrap{
+    max-width:620px;
+    margin:0 auto;
+    padding:36px 0 60px;
+}
+
+@media(max-width:768px){
+
+    .wrap{
+        padding:24px 14px 40px;
+    }
+
+    .form-card{
+        padding:20px;
+    }
+}
+
+@media(max-width:480px){
+
+    .wrap{
+        padding:18px 12px 30px;
+    }
+}
 .page-header { margin-bottom: 28px; }
 .page-header h2 { font-size: 1.7rem; font-weight: 800; margin-bottom: 6px; }
 .page-header p { color: var(--text-muted); }
@@ -11,6 +33,15 @@
 .pic-upload:hover { border-color: var(--primary); background: var(--primary-soft); }
 .pic-preview { width: 90px; height: 90px; border-radius: 50%; background: var(--primary-soft); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; color: var(--primary); overflow: hidden; }
 .pic-preview img { width: 100%; height: 100%; object-fit: cover; }
+@media(max-width:768px){
+    .wrap{
+        padding:24px 14px 40px;
+    }
+
+    .form-card{
+        padding:20px;
+    }
+}
 {% endblock %}
 
 {% block content %}
