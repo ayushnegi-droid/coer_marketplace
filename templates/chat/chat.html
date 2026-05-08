@@ -98,7 +98,7 @@
 
 {% block extra_js %}
 <script>
-// Auto scroll to bottom
+// Scroll to bottom on load
 const msgs = document.getElementById('chatMessages');
 msgs.scrollTop = msgs.scrollHeight;
 
@@ -109,5 +109,24 @@ document.getElementById('chatInput').addEventListener('keydown', function(e) {
         this.closest('form').submit();
     }
 });
+
+// Auto refresh messages every 3 seconds
+setInterval(function() {
+    fetch(window.location.href)
+        .then(r => r.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newMsgs = doc.getElementById('chatMessages');
+            const currentMsgs = document.getElementById('chatMessages');
+            if (newMsgs && currentMsgs.innerHTML !== newMsgs.innerHTML) {
+                const wasAtBottom = currentMsgs.scrollTop + currentMsgs.clientHeight >= currentMsgs.scrollHeight - 10;
+                currentMsgs.innerHTML = newMsgs.innerHTML;
+                if (wasAtBottom) {
+                    currentMsgs.scrollTop = currentMsgs.scrollHeight;
+                }
+            }
+        });
+}, 3000);
 </script>
 {% endblock %}
