@@ -29,14 +29,20 @@ def login_view(request):
             user     = authenticate(request, username=email, password=password)
             if user:
                 login(request, user)
-                # If profile not set up yet, go to setup
                 if not hasattr(user, 'profile') or not user.profile.setup_done:
                     return redirect('profile_setup')
                 return redirect('home')
             else:
-                error = 'Invalid email or password.'
+                # Check if the email exists in the database
+                try:
+                    CustomUser.objects.get(email=email)
+                    # Email exists but password is wrong
+                    error = 'Incorrect password. Please try again.'
+                except CustomUser.DoesNotExist:
+                    # Email not found at all
+                    error = 'No account found with this email. Please register first.'
         else:
-            error = 'Please enter a valid college email.'
+            error = 'Please enter a valid college email (@coeruniversity.ac.in).'
     return render(request, 'accounts/login.html', {'form': form, 'error': error})
 
 
@@ -54,7 +60,7 @@ def profile_setup_view(request):
             p = form.save(commit=False)
             p.setup_done = True
             p.save()
-            messages.success(request, f'Welcome to COER Marketplace, {p.full_name.split()[0]}! 🎉')
+            messages.success(request, f'Welcome to COER_Marketplace, {p.full_name.split()[0]}! 🎉')
             return redirect('home')
     else:
         form = ProfileForm(instance=profile)
