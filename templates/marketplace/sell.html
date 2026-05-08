@@ -44,9 +44,9 @@
                         <button type="button" class="remove-img" onclick="removeImg(event,2)"><i class="fas fa-times"></i></button>
                     </div>
                 </div>
-                <input type="file" id="img0" name="image1" accept="image/*" style="display:none;" onchange="previewSlot(this,0)" 
-                <input type="file" id="img1" name="image2" accept="image/*" style="display:none;" onchange="previewSlot(this,1)" 
-                <input type="file" id="img2" name="image3" accept="image/*" style="display:none;" onchange="previewSlot(this,2)" 
+                <input type="file" id="img0" name="image1" accept="image/*" style="display:none;" onchange="previewSlot(this,0)">
+                <input type="file" id="img1" name="image2" accept="image/*" style="display:none;" onchange="previewSlot(this,1)">
+                <input type="file" id="img2" name="image3" accept="image/*" style="display:none;" onchange="previewSlot(this,2)">
                 {% if form.image1.errors %}
                     <span class="form-error">{{ form.image1.errors|join:', ' }}</span>
                 {% endif %}
@@ -123,7 +123,7 @@ function previewSlot(input, slot) {
 function removeImg(e, slot) {
     e.stopPropagation();
     document.getElementById('img' + slot).value = '';
-    const labels = ['Photo 1','Photo 2','Photo 3'];
+    const labels = ['Photo 1', 'Photo 2', 'Photo 3'];
     const s = document.getElementById('slot' + slot);
     s.innerHTML = `<i class="fas fa-camera"></i><span>${labels[slot]}</span><button type="button" class="remove-img" onclick="removeImg(event,${slot})"><i class="fas fa-times"></i></button>`;
 }
