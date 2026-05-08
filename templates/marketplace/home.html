@@ -31,8 +31,109 @@
 .card-footer { display: flex; align-items: center; justify-content: space-between; }
 .card-price { font-size: 1.15rem; font-weight: 800; color: var(--primary); font-family: 'Sora', sans-serif; }
 .card-seller { font-size: 0.78rem; color: var(--text-light); display: flex; align-items: center; gap: 4px; }
-@media(max-width:768px){ .hp-hero { flex-direction:column; text-align:center; padding:28px 22px; } .hero-emoji { font-size:3.5rem; } }
-@media(max-width:480px){ .items-grid { grid-template-columns:1fr 1fr; gap:12px; } }
+@media(max-width:768px){
+
+    .hp-wrap{
+        padding:20px 0 40px;
+    }
+
+    .hp-hero{
+        flex-direction:column;
+        text-align:center;
+        padding:28px 20px;
+        border-radius:18px;
+    }
+
+    .hero-text h2{
+        font-size:1.6rem;
+        line-height:1.2;
+    }
+
+    .hero-text p{
+        font-size:0.9rem;
+        max-width:100%;
+    }
+
+    .hero-emoji{
+        font-size:3.5rem;
+    }
+
+    .filters-bar{
+        padding:12px;
+        gap:8px;
+    }
+
+    .filters-bar label{
+        width:100%;
+        margin-top:4px;
+    }
+
+    .filter-select{
+        width:100% !important;
+        min-width:0;
+    }
+
+    .filter-divider{
+        display:none;
+    }
+
+    .items-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .card-img{
+        height:140px;
+    }
+
+    .card-body{
+        padding:12px;
+    }
+
+    .card-title{
+        font-size:0.9rem;
+        line-height:1.3;
+    }
+
+    .card-desc{
+        font-size:0.75rem;
+        margin-bottom:10px;
+    }
+
+    .card-footer{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:4px;
+    }
+
+    .card-price{
+        font-size:1rem;
+    }
+
+    .card-seller{
+        width:100%;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        font-size:0.72rem;
+    }
+}
+
+@media(max-width:480px){
+
+    .items-grid{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .hero-text h2{
+        font-size:1.4rem;
+    }
+
+    .card-img{
+        height:120px;
+    }
+}
 {% endblock %}
 
 {% block content %}

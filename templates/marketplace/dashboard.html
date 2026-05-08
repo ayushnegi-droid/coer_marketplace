@@ -33,7 +33,154 @@
 .wish-body { padding: 12px; }
 .wish-title { font-weight: 700; font-size: 0.88rem; margin-bottom: 4px; }
 .wish-price { font-weight: 800; color: var(--primary); font-family: 'Sora', sans-serif; font-size: 0.95rem; }
-@media(max-width:640px){ .stats-row { grid-template-columns: 1fr 1fr; } }
+@media(max-width:768px){
+
+    .dashboard-wrap{
+        padding:24px 0 40px;
+    }
+
+    /* HEADER */
+    .dash-header{
+        gap:14px;
+        margin-bottom:24px;
+    }
+
+    .dash-avatar{
+        width:58px;
+        height:58px;
+        font-size:1.2rem;
+    }
+
+    .dash-name{
+        font-size:1.1rem;
+    }
+
+    .dash-dept{
+        font-size:0.82rem;
+    }
+
+    /* STATS */
+    .stats-row{
+        grid-template-columns:repeat(3,1fr);
+        gap:10px;
+    }
+
+    .stat-card{
+        padding:14px 8px;
+    }
+
+    .stat-num{
+        font-size:1.2rem;
+    }
+
+    .stat-label{
+        font-size:0.7rem;
+        line-height:1.2;
+    }
+
+    /* TABS */
+    .dash-tabs{
+        width:100%;
+        overflow-x:auto;
+        flex-wrap:nowrap;
+        padding:4px;
+        gap:6px;
+        scrollbar-width:none;
+    }
+
+    .dash-tabs::-webkit-scrollbar{
+        display:none;
+    }
+
+    .dash-tab{
+        white-space:nowrap;
+        flex-shrink:0;
+        padding:8px 14px;
+        font-size:0.8rem;
+    }
+
+    /* LISTINGS */
+    .listing-card{
+        padding:12px;
+        gap:12px;
+        align-items:flex-start;
+    }
+
+    .listing-img{
+        width:58px;
+        height:58px;
+        font-size:1.3rem;
+    }
+
+    .listing-title{
+        font-size:0.88rem;
+    }
+
+    .listing-price{
+        font-size:0.84rem;
+    }
+
+    .listing-actions{
+        width:100%;
+        margin-top:10px;
+    }
+
+    .listing-actions .btn{
+        flex:1;
+        justify-content:center;
+        padding:8px 10px;
+        font-size:0.75rem;
+    }
+
+    /* WISHLIST */
+    .wish-grid{
+        grid-template-columns:1fr 1fr;
+        gap:12px;
+    }
+
+    .wish-img{
+        height:120px;
+    }
+
+    .wish-title{
+        font-size:0.8rem;
+    }
+
+    .wish-price{
+        font-size:0.85rem;
+    }
+}
+
+@media(max-width:480px){
+
+    .stats-row{
+        gap:8px;
+    }
+
+    .stat-card{
+        padding:12px 6px;
+    }
+
+    .stat-num{
+        font-size:1rem;
+    }
+
+    .stat-label{
+        font-size:0.65rem;
+    }
+
+    .listing-card{
+        flex-direction:column;
+    }
+
+    .listing-actions{
+        flex-direction:column;
+    }
+
+    .listing-actions .btn{
+        width:100%;
+    }
+}
 {% endblock %}
 
 {% block content %}

@@ -26,7 +26,128 @@
 .seller-av img { width: 100%; height: 100%; object-fit: cover; }
 .seller-name { font-weight: 700; font-size: 0.95rem; }
 .seller-dept { font-size: 0.82rem; color: var(--text-muted); }
-@media(max-width:768px){ .detail-grid { grid-template-columns: 1fr; } }
+@media(max-width:768px){
+
+    .detail-wrap{
+        padding:22px 0 40px;
+    }
+
+    .detail-grid{
+        grid-template-columns:1fr;
+        gap:22px;
+    }
+
+    /* CAROUSEL */
+    .carousel{
+        border-radius:18px;
+    }
+
+    .carousel-slide{
+        aspect-ratio:1/1;
+        font-size:3rem;
+    }
+
+    .car-btn{
+        width:32px;
+        height:32px;
+        font-size:0.75rem;
+    }
+
+    .car-btn.prev{
+        left:8px;
+    }
+
+    .car-btn.next{
+        right:8px;
+    }
+
+    /* INFO */
+    .detail-info{
+        gap:14px;
+    }
+
+    .detail-category{
+        font-size:0.72rem;
+    }
+
+    .detail-title{
+        font-size:1.4rem;
+        line-height:1.25;
+        margin-top:4px;
+    }
+
+    .detail-price{
+        font-size:1.6rem;
+    }
+
+    .detail-desc{
+        font-size:0.88rem;
+        line-height:1.6;
+    }
+
+    /* SELLER */
+    .seller-card{
+        padding:14px;
+        gap:12px;
+    }
+
+    .seller-av{
+        width:42px;
+        height:42px;
+        font-size:0.95rem;
+    }
+
+    .seller-name{
+        font-size:0.88rem;
+    }
+
+    .seller-dept{
+        font-size:0.76rem;
+    }
+
+    /* BUTTONS */
+    .btn-full{
+        padding:12px;
+        font-size:0.88rem;
+    }
+
+    /* OWNER BUTTONS */
+    .detail-info > div:last-child{
+        flex-direction:column;
+    }
+
+    .detail-info > div:last-child .btn{
+        width:100%;
+        justify-content:center;
+    }
+}
+
+@media(max-width:480px){
+
+    .detail-wrap{
+        padding-top:16px;
+    }
+
+    .detail-title{
+        font-size:1.25rem;
+    }
+
+    .detail-price{
+        font-size:1.45rem;
+    }
+
+    .carousel-slide{
+        aspect-ratio:1/1;
+    }
+
+    .detail-desc{
+        font-size:0.84rem;
+    }
+
+    .seller-card{
+        align-items:flex-start;
+    }
+}
 {% endblock %}
 
 {% block content %}
