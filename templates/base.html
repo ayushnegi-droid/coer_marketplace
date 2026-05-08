@@ -224,6 +224,81 @@
 }
 
         {% block extra_css %}{% endblock %}
+        /* FORCE MOBILE FIXES */
+@media screen and (max-width:768px){
+
+    .stats-grid,
+    .dashboard-stats{
+        grid-template-columns:repeat(3,1fr)!important;
+    }
+
+    .message-tabs,
+    .dashboard-tabs{
+        flex-wrap:nowrap!important;
+        overflow-x:auto!important;
+    }
+
+    .filter-bar,
+    .filters,
+    .filter-wrap{
+        display:flex!important;
+        flex-wrap:wrap!important;
+        gap:10px!important;
+    }
+
+    .filter-bar > *,
+    .filters > *,
+    .filter-wrap > *{
+        flex:1 1 calc(50% - 10px)!important;
+        min-width:120px!important;
+    }
+
+    .item-grid,
+    .listing-grid,
+    .products-grid{
+        grid-template-columns:repeat(2,1fr)!important;
+        gap:12px!important;
+    }
+
+    .seller-name,
+    .item-seller,
+    .listing-seller{
+        overflow:hidden!important;
+        text-overflow:ellipsis!important;
+        white-space:nowrap!important;
+    }
+
+    .chat-container{
+        height:calc(100vh - 70px)!important;
+        display:flex!important;
+        flex-direction:column!important;
+    }
+
+    .chat-messages{
+        flex:1!important;
+        overflow-y:auto!important;
+    }
+
+    .chat-input-area,
+    .message-input-wrap{
+        position:sticky!important;
+        bottom:0!important;
+        background:#fff!important;
+        z-index:100!important;
+    }
+
+    h1{
+        font-size:1.7rem!important;
+    }
+
+    h2{
+        font-size:1.3rem!important;
+    }
+
+    .price{
+        font-size:1.3rem!important;
+    }
+}
     </style>
 </head>
 <body>
