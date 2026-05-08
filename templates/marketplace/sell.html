@@ -44,9 +44,9 @@
                         <button type="button" class="remove-img" onclick="removeImg(event,2)"><i class="fas fa-times"></i></button>
                     </div>
                 </div>
-                <input type="file" id="img0" name="image1" accept="image/*" style="display:none;" onchange="previewSlot(this,0)" required>
-                <input type="file" id="img1" name="image2" accept="image/*" style="display:none;" onchange="previewSlot(this,1)" required>
-                <input type="file" id="img2" name="image3" accept="image/*" style="display:none;" onchange="previewSlot(this,2)" required>
+                <input type="file" id="img0" name="image1" accept="image/*" style="display:none;" onchange="previewSlot(this,0)" 
+                <input type="file" id="img1" name="image2" accept="image/*" style="display:none;" onchange="previewSlot(this,1)" 
+                <input type="file" id="img2" name="image3" accept="image/*" style="display:none;" onchange="previewSlot(this,2)" 
                 {% if form.image1.errors %}
                     <span class="form-error">{{ form.image1.errors|join:', ' }}</span>
                 {% endif %}

@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from .models import Listing, Wishlist, CATEGORY_CHOICES
 from .forms import ListingForm
 from chat.models import Message
+from accounts.models import CustomUser
 
 CATEGORIES = [c[0] for c in CATEGORY_CHOICES]
 
@@ -36,9 +37,9 @@ def home_view(request):
     )
 
     return render(request, 'marketplace/home.html', {
-        'listings':    listings,
+        'listings':     listings,
         'wishlist_ids': wishlist_ids,
-        'categories':  CATEGORIES,
+        'categories':   CATEGORIES,
     })
 
 
@@ -109,13 +110,35 @@ def delete_listing(request, pk):
 def dashboard_view(request):
     my_listings = Listing.objects.filter(seller=request.user).order_by('-created_at')
     wishlist    = Wishlist.objects.filter(user=request.user).select_related('listing')
+    sold_count  = my_listings.filter(status='sold').count()
 
-    # Items the user has sent messages about
+    # Items the user has SENT messages about (as buyer)
     contacted_ids      = Message.objects.filter(sender=request.user).values_list('listing_id', flat=True).distinct()
     contacted_listings = Listing.objects.filter(pk__in=contacted_ids)
 
+    # Messages RECEIVED by this user (as seller)
+    received = Message.objects.filter(
+        receiver=request.user
+    ).values('listing_id', 'sender_id').distinct()
+
+    buyer_conversations = []
+    seen = set()
+    for msg in received:
+        key = (msg['listing_id'], msg['sender_id'])
+        if key not in seen:
+            seen.add(key)
+            listing = Listing.objects.filter(pk=msg['listing_id']).first()
+            buyer   = CustomUser.objects.filter(pk=msg['sender_id']).first()
+            if listing and buyer:
+                buyer_conversations.append({
+                    'listing': listing,
+                    'buyer':   buyer,
+                })
+
     return render(request, 'marketplace/dashboard.html', {
-        'my_listings':        my_listings,
-        'wishlist':           wishlist,
-        'contacted_listings': contacted_listings,
+        'my_listings':          my_listings,
+        'wishlist':             wishlist,
+        'contacted_listings':   contacted_listings,
+        'buyer_conversations':  buyer_conversations,
+        'sold_count':           sold_count,
     })

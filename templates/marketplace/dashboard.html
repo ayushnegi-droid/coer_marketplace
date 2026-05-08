@@ -12,7 +12,7 @@
 .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; text-align: center; }
 .stat-num { font-size: 1.8rem; font-weight: 900; color: var(--primary); font-family: 'Sora', sans-serif; }
 .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; }
-.dash-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: var(--bg-card); padding: 4px; border-radius: 40px; border: 1px solid var(--border); width: fit-content; }
+.dash-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: var(--bg-card); padding: 4px; border-radius: 40px; border: 1px solid var(--border); width: fit-content; flex-wrap: wrap; }
 .dash-tab { padding: 8px 20px; border-radius: 40px; border: none; background: none; font-family: inherit; font-size: 0.88rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s; }
 .dash-tab.active { background: var(--primary); color: #fff; }
 .tab-content { display: none; }
@@ -68,7 +68,7 @@
                 <div class="stat-label">My Listings</div>
             </div>
             <div class="stat-card">
-                <div class="stat-num">{{ my_listings|dictsortreversed:"status"|length }}</div>
+                <div class="stat-num">{{ sold_count }}</div>
                 <div class="stat-label">Sold Items</div>
             </div>
             <div class="stat-card">
@@ -82,6 +82,7 @@
             <button class="dash-tab active" onclick="switchTab('my-listings', this)">My Listings</button>
             <button class="dash-tab" onclick="switchTab('contacted', this)">Contacted</button>
             <button class="dash-tab" onclick="switchTab('wishlist', this)">Wishlist</button>
+            <button class="dash-tab" onclick="switchTab('messages', this)">📬 Messages</button>
         </div>
 
         <!-- MY LISTINGS TAB -->
@@ -184,6 +185,39 @@
                     <div class="empty-icon">❤️</div>
                     <h3>No saved items</h3>
                     <p>Tap the heart on any listing to save it here.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- MESSAGES TAB -->
+        <div class="tab-content" id="tab-messages">
+            {% if buyer_conversations %}
+                {% for conv in buyer_conversations %}
+                <div class="listing-card" style="cursor:pointer;"
+                    onclick="location.href='{% url 'chat' conv.listing.pk %}'">
+                    <div class="listing-img">
+                        {% if conv.listing.image1 %}
+                            <img src="{{ conv.listing.image1.url }}" alt="">
+                        {% else %}📦{% endif %}
+                    </div>
+                    <div class="listing-info">
+                        <div class="listing-title">{{ conv.listing.title }}</div>
+                        <div style="font-size:0.82rem;color:var(--text-muted);margin-top:3px;">
+                            From: {{ conv.buyer.profile.full_name }}
+                        </div>
+                    </div>
+                    <a href="{% url 'chat' conv.listing.pk %}"
+                        class="btn btn-sm btn-outline"
+                        onclick="event.stopPropagation()">
+                        <i class="fas fa-comment"></i> Reply
+                    </a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">📬</div>
+                    <h3>No messages yet</h3>
+                    <p>When buyers contact you about your listings, they'll appear here.</p>
                 </div>
             {% endif %}
         </div>
