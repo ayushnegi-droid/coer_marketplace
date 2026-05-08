@@ -99,3 +99,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ALLOWED_EMAIL_DOMAIN = 'coeruniversity.ac.in'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('dfefxc3aj'),
+    'API_KEY': os.environ.get('725385862482216'),
+    'API_SECRET': os.environ.get('**********'),
+}
