@@ -25,7 +25,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary',
     'accounts',
     'marketplace',
     'chat',
@@ -40,13 +42,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('dfefxc3aj'),
-    'API_KEY': os.environ.get('725385862482216'),
-    'API_SECRET': os.environ.get('**********'),
-}
-
 
 ROOT_URLCONF = 'coer_marketplace.urls'
 
@@ -67,8 +62,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'coer_marketplace.wsgi.application'
-
-import dj_database_url
 
 DATABASES = {
     'default': dj_database_url.config(
@@ -107,3 +100,10 @@ ALLOWED_EMAIL_DOMAIN = 'coeruniversity.ac.in'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('dfefxc3aj'),
+    'API_KEY': os.environ.get('725385862482216'),
+    'API_SECRET': os.environ.get('LTKSnt0gbWRoniKyduNn3XeIiJQ'),
+}
