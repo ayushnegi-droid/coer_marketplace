@@ -133,6 +133,7 @@ def dashboard_view(request):
                 buyer_conversations.append({
                     'listing': listing,
                     'buyer':   buyer,
+                    'buyer_id': buyer.pk,
                 })
 
     return render(request, 'marketplace/dashboard.html', {
